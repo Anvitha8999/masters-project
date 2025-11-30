@@ -1,0 +1,107 @@
+# Ultra Fast Training Configuration - Complete in ~10 minutes
+
+# Dataset Paths
+data:
+  meld_dir: "data/meld"
+  text_dir: "data/meld/text"
+  video_dir: "data/meld/video"
+  audio_dir: "data/meld/audio"
+  train_csv: "data/meld/text/train.csv"
+  test_csv: "data/meld/text/test.csv"
+
+# Data Processing - Minimal for speed
+processing:
+  # Audio settings
+  sample_rate: 16000
+  max_audio_length: 6
+  n_mfcc: 32
+  n_fft: 512
+  hop_length: 256
+
+  # Text settings
+  max_text_length: 64
+  embedding_dim: 768
+
+# Model Architecture - Smallest possible
+model:
+  fine_tune_bert: false
+
+  # Text branch
+  text_cnn_filters: 32
+  text_cnn_kernel_sizes: [3]
+  text_bilstm_hidden: 64
+  text_bilstm_layers: 1
+
+  # Audio branch
+  audio_cnn_filters: 32
+  audio_bilstm_hidden: 64
+  audio_bilstm_layers: 1
+
+  # Attention
+  attention_dim: 64
+
+  # Fusion and classification
+  fusion_hidden: 128
+  dropout: 0.5
+  num_emotions: 7
+
+# Training - Ultra fast settings
+training:
+  batch_size: 128
+  num_epochs: 3
+
+  # Gradient accumulation
+  gradient_accumulation_steps: 1
+
+  # Learning rate optimization
+  learning_rate: 0.005
+  warmup_steps: 0
+  max_grad_norm: 1.0
+
+  weight_decay: 0.0001
+  early_stopping_patience: 2
+
+  # Learning rate schedule
+  lr_schedule: "cosine_with_warmup"
+
+  # Data loading optimization
+  num_workers: 0
+  pin_memory: false
+  prefetch_factor: 2
+
+  # Class weights
+  use_class_weights: true
+
+  # Label smoothing
+  label_smoothing: 0.1
+
+# Emotions mapping
+emotions:
+  labels: ["anger", "disgust", "fear", "joy", "neutral", "sadness", "surprise"]
+  label2id:
+    anger: 0
+    disgust: 1
+    fear: 2
+    joy: 3
+    neutral: 4
+    sadness: 5
+    surprise: 6
+
+# Device
+device: "cpu"
+
+# Random seed
+random_seed: 42
+
+# Output directories
+output:
+  models_dir: "models"
+  logs_dir: "logs"
+  results_dir: "results"
+
+# Optimization flags
+optimization:
+  use_amp: false
+  compile_model: false
+  cache_datasets: true
+  cache_dir: "data/cache"

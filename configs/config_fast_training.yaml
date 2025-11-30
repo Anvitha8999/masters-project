@@ -1,0 +1,107 @@
+# Fast Training Configuration - Optimized for Speed and Accuracy
+
+# Dataset Paths
+data:
+  meld_dir: "data/meld"
+  text_dir: "data/meld/text"
+  video_dir: "data/meld/video"
+  audio_dir: "data/meld/audio"
+  train_csv: "data/meld/text/train.csv"
+  test_csv: "data/meld/text/test.csv"
+
+# Data Processing - More aggressive reduction
+processing:
+  # Audio settings
+  sample_rate: 16000
+  max_audio_length: 6 # Reduced from 8 for faster processing
+  n_mfcc: 32 # Reduced from 40
+  n_fft: 512
+  hop_length: 256
+
+  # Text settings
+  max_text_length: 64 # Reduced from 96 for faster processing
+  embedding_dim: 768
+
+# Model Architecture - Optimized for speed
+model:
+  fine_tune_bert: false
+
+  # Text branch - More reduction
+  text_cnn_filters: 64 # Reduced from 96
+  text_cnn_kernel_sizes: [3, 5]
+  text_bilstm_hidden: 128 # Reduced from 192
+  text_bilstm_layers: 1
+
+  # Audio branch - More reduction
+  audio_cnn_filters: 64 # Reduced from 96
+  audio_bilstm_hidden: 128 # Reduced from 192
+  audio_bilstm_layers: 1
+
+  # Attention
+  attention_dim: 128 # Reduced from 192
+
+  # Fusion and classification
+  fusion_hidden: 256 # Reduced from 384
+  dropout: 0.5 # Increased for better regularization
+  num_emotions: 7
+
+# Training - Fast training settings
+training:
+  batch_size: 32 # Doubled from 16
+  num_epochs: 15 # Reduced from 30 - quality over quantity
+
+  # Gradient accumulation
+  gradient_accumulation_steps: 1 # Removed to speed up
+
+  # Learning rate optimization
+  learning_rate: 0.003 # Increased for faster convergence
+  warmup_steps: 200 # Reduced warmup
+  max_grad_norm: 1.0
+
+  weight_decay: 0.0001
+  early_stopping_patience: 5 # More aggressive early stopping
+
+  # Learning rate schedule
+  lr_schedule: "cosine_with_warmup"
+
+  # Data loading optimization
+  num_workers: 0 # Set to 0 for CPU to avoid overhead
+  pin_memory: false # Disabled for CPU
+  prefetch_factor: 2
+
+  # Class weights
+  use_class_weights: true
+
+  # Label smoothing
+  label_smoothing: 0.1
+
+# Emotions mapping
+emotions:
+  labels: ["anger", "disgust", "fear", "joy", "neutral", "sadness", "surprise"]
+  label2id:
+    anger: 0
+    disgust: 1
+    fear: 2
+    joy: 3
+    neutral: 4
+    sadness: 5
+    surprise: 6
+
+# Device
+device: "cpu"
+
+# Random seed
+random_seed: 42
+
+# Output directories
+output:
+  models_dir: "models"
+  logs_dir: "logs"
+  results_dir: "results"
+
+# Optimization flags
+optimization:
+  use_amp: false # Mixed precision (CPU doesn't support)
+  compile_model: false
+  cache_datasets: true # Enable caching
+  cache_dir: "data/cache" # Directory for cached features

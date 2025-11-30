@@ -1,0 +1,81 @@
+# Configuration file for Emotion Recognition System
+
+# Dataset Paths
+data:
+  meld_dir: "data/meld"
+  text_dir: "data/meld/text"
+  video_dir: "data/meld/video"
+  audio_dir: "data/meld/audio" # Will be created by audio extraction
+  train_csv: "data/meld/text/train.csv"
+  test_csv: "data/meld/text/test.csv"
+
+# Data Processing
+processing:
+  # Audio settings
+  sample_rate: 16000
+  max_audio_length: 10 # seconds
+  n_mfcc: 40
+  n_fft: 512
+  hop_length: 256
+
+  # Text settings
+  max_text_length: 128
+  embedding_dim: 768 # BERT base embedding size
+
+# Model Architecture
+model:
+  fine_tune_bert: false # FROZEN for CPU memory constraints
+
+  # Text branch
+  text_cnn_filters: 128
+  text_cnn_kernel_sizes: [3, 4, 5]
+  text_bilstm_hidden: 256
+  text_bilstm_layers: 2
+
+  # Audio branch
+  audio_cnn_filters: 128
+  audio_bilstm_hidden: 256
+  audio_bilstm_layers: 2
+
+  # Attention
+  attention_dim: 256
+
+  # Fusion and classification
+  fusion_hidden: 512
+  dropout: 0.3
+  num_emotions: 7 # anger, disgust, fear, joy, neutral, sadness, surprise
+
+# Training
+training:
+  batch_size: 8 # Reduced for memory
+  num_epochs: 50 # Full training
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  early_stopping_patience: 10
+
+  # Class weights (for handling imbalance)
+  use_class_weights: true
+
+# Emotions mapping
+emotions:
+  labels: ["anger", "disgust", "fear", "joy", "neutral", "sadness", "surprise"]
+  label2id:
+    anger: 0
+    disgust: 1
+    fear: 2
+    joy: 3
+    neutral: 4
+    sadness: 5
+    surprise: 6
+
+# Device
+device: "cpu" # or "cuda"
+
+# Random seed for reproducibility
+random_seed: 42
+
+# Output directories
+output:
+  models_dir: "models"
+  logs_dir: "logs"
+  results_dir: "results"

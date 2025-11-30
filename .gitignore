@@ -1,0 +1,60 @@
+# .gitignore for Emotion Recognition Project
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual environments
+venv/
+env/
+ENV/
+environments/
+
+# Data files (ignore large files but keep CSVs and structure)
+data/meld/video/*.mp4
+data/meld/audio/*.wav
+data/cache/
+*.mp4
+*.wav
+*.avi
+*.mkv
+
+# Model checkpoints
+models/*.pt
+models/*.pth
+
+# Logs
+logs/
+runs/
+*.log
+
+# Results
+results/
+*.png
+*.jpg
+*.pdf
+
+# TensorBoard
+events.out.tfevents.*
+
+# Jupyter Notebooks
+.ipynb_checkpoints
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*~

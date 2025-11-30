@@ -1,0 +1,75 @@
+# High Accuracy Configuration - Fine-tune BERT
+# Expected: 60-65% F1 score
+# Time: 3-4 hours on CPU
+
+data:
+  meld_dir: "data/meld"
+  text_dir: "data/meld/text"
+  video_dir: "data/meld/video"
+  audio_dir: "data/meld/audio"
+  train_csv: "data/meld/text/train.csv"
+  test_csv: "data/meld/text/test.csv"
+
+processing:
+  sample_rate: 16000
+  max_audio_length: 6
+  n_mfcc: 32
+  n_fft: 512
+  hop_length: 256
+  max_text_length: 64
+  embedding_dim: 768
+
+model:
+  fine_tune_bert: true # KEY CHANGE: Fine-tune BERT for better text understanding
+  text_cnn_filters: 128
+  text_cnn_kernel_sizes: [3, 5]
+  text_bilstm_hidden: 256
+  text_bilstm_layers: 2
+  audio_cnn_filters: 128
+  audio_bilstm_hidden: 256
+  audio_bilstm_layers: 2
+  attention_dim: 256
+  fusion_hidden: 512
+  dropout: 0.3
+  num_emotions: 7
+
+training:
+  batch_size: 16 # Smaller batch for BERT fine-tuning
+  num_epochs: 30
+  gradient_accumulation_steps: 2 # Effective batch size = 32
+  learning_rate: 0.00002 # Lower LR for BERT fine-tuning
+  warmup_steps: 200
+  max_grad_norm: 1.0
+  weight_decay: 0.01
+  early_stopping_patience: 10
+  lr_schedule: "cosine_with_warmup"
+  num_workers: 0
+  pin_memory: false
+  prefetch_factor: 2
+  use_class_weights: true
+  label_smoothing: 0.1
+
+emotions:
+  labels: ["anger", "disgust", "fear", "joy", "neutral", "sadness", "surprise"]
+  label2id:
+    anger: 0
+    disgust: 1
+    fear: 2
+    joy: 3
+    neutral: 4
+    sadness: 5
+    surprise: 6
+
+device: "cpu"
+random_seed: 42
+
+output:
+  models_dir: "models"
+  logs_dir: "logs"
+  results_dir: "results"
+
+optimization:
+  use_amp: false
+  compile_model: false
+  cache_datasets: true
+  cache_dir: "data/cache"

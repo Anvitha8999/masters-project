@@ -1,0 +1,73 @@
+# Better Training Configuration - ~1-2 hours for good results
+
+data:
+  meld_dir: "data/meld"
+  text_dir: "data/meld/text"
+  video_dir: "data/meld/video"
+  audio_dir: "data/meld/audio"
+  train_csv: "data/meld/text/train.csv"
+  test_csv: "data/meld/text/test.csv"
+
+processing:
+  sample_rate: 16000
+  max_audio_length: 6
+  n_mfcc: 32
+  n_fft: 512
+  hop_length: 256
+  max_text_length: 64
+  embedding_dim: 768
+
+model:
+  fine_tune_bert: false
+  text_cnn_filters: 64
+  text_cnn_kernel_sizes: [3]
+  text_bilstm_hidden: 128
+  text_bilstm_layers: 2
+  audio_cnn_filters: 64
+  audio_bilstm_hidden: 128
+  audio_bilstm_layers: 2
+  attention_dim: 128
+  fusion_hidden: 256
+  dropout: 0.4
+  num_emotions: 7
+
+training:
+  batch_size: 32
+  num_epochs: 20
+  gradient_accumulation_steps: 1
+  learning_rate: 0.001
+  warmup_steps: 100
+  max_grad_norm: 1.0
+  weight_decay: 0.0001
+  early_stopping_patience: 7
+  lr_schedule: "cosine_with_warmup"
+  num_workers: 0
+  pin_memory: false
+  prefetch_factor: 2
+  use_class_weights: true
+  label_smoothing: 0.1
+
+emotions:
+  labels: ["anger", "disgust", "fear", "joy", "neutral", "sadness", "surprise"]
+  label2id:
+    anger: 0
+    disgust: 1
+    fear: 2
+    joy: 3
+    neutral: 4
+    sadness: 5
+    surprise: 6
+
+device: "cpu"
+random_seed: 42
+
+output:
+  models_dir: "models"
+  logs_dir: "logs"
+  results_dir: "results"
+
+optimization:
+  use_amp: false
+  compile_model: false
+  cache_datasets: true
+  cache_dir: "data/cache"
