@@ -240,14 +240,6 @@ training:
   early_stopping_patience: 10
 ```
 
-## Expected Results
-
-**Performance:**
-
-- Accuracy: 65-75%
-- F1-Score: 0.68-0.75
-- Inference Time: < 200ms
-
 **Dataset:**
 
 - Training: ~9,000 utterances
