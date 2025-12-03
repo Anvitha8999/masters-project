@@ -133,17 +133,6 @@ training:
 - Training: ~9,000 utterances
 - Test: ~2,600 utterances
 
-## Troubleshooting
-
-### CUDA Out of Memory
-
-Reduce batch size in `configs/config.yaml`:
-
-```yaml
-training:
-  batch_size: 16
-```
-
 ## Project Timeline
 
 | Month     | Tasks                                      |
