@@ -40,43 +40,6 @@ anvitha-project/
 └── README.md                    # This file
 ```
 
-## Setup Instructions
-
-### Step 1: Activate Environment
-
-```powershell
-cd E:\project
-environments\anvita\Scripts\activate
-```
-
-### Step 2: Install Dependencies
-
-```powershell
-cd anvitha-project
-pip install -r requirements.txt
-```
-
-### Step 3: Download MELD Dataset
-
-**3.1 Download the Dataset**
-
-Download the MELD dataset from the official repository:
-
-**Option 1: Direct Download**
-
-- Visit: https://affective-meld.github.io/
-- Or GitHub: https://github.com/declare-lab/MELD
-
-**Option 2: Download Files**
-
-Download these files:
-
-- `train.tar.gz` (76.78 MB) - Training videos
-- `dev.tar.gz` (7.57 MB) - Development videos
-- `test.tar.gz` (21.84 MB) - Test videos
-- `train_sent_emo.csv` - Training text data
-- `dev_sent_emo.csv` - Development text data
-- `test_sent_emo.csv` - Test text data
 
 **3.2 Extract and Organize Files**
 
@@ -120,81 +83,6 @@ data/
     └── audio/
         └── (will be created by extract_audio.py)
 ```
-
-### Step 4: Prepare Dataset
-
-**4.1 Clean the Dataset**
-
-Remove unnecessary columns from CSV files:
-
-```powershell
-python scripts/clean_dataset.py
-```
-
-This creates `train_clean.csv` and `test_clean.csv` with only essential columns:
-
-- Sr No.
-- Utterance
-- Emotion
-- Sentiment
-
-**4.2 Extract Audio from Videos**
-
-Extract audio tracks from video files:
-
-```powershell
-python scripts/extract_audio.py
-```
-
-This extracts audio from `data/meld/video/*.mp4` and saves as `data/meld/audio/*.wav`
-
-## Usage
-
-### 1. Train the Model
-
-```powershell
-python scripts/train.py
-```
-
-**What happens:**
-
-- Loads data from `data/meld/text/train_clean.csv`
-- Processes text (BERT) and audio (MFCC)
-- Trains CNN-BiLSTM model
-- Saves best model to `models/best_model.pt`
-
-**Training time:** 2-4 hours on GPU
-
-**Monitor training:**
-
-```powershell
-tensorboard --logdir logs
-```
-
-Open http://localhost:6006 in browser
-
-### 2. Run Inference
-
-**Interactive Mode:**
-
-```powershell
-python scripts/inference.py --mode interactive
-```
-
-Example:
-
-```
-Enter text: I'm so excited about this project!
-Predicted Emotion: JOY
-Confidence: 87.45%
-```
-
-**Single Prediction:**
-
-```powershell
-python scripts/inference.py --text "I can't believe this happened!"
-```
-
 ## Model Architecture
 
 **Text Branch:**
@@ -254,25 +142,6 @@ Reduce batch size in `configs/config.yaml`:
 ```yaml
 training:
   batch_size: 16
-```
-
-### Audio Extraction Fails
-
-Install ffmpeg:
-
-```powershell
-choco install ffmpeg
-```
-
-Or download from: https://ffmpeg.org/download.html
-
-### Module Not Found
-
-Ensure environment is activated:
-
-```powershell
-cd E:\project\anvitha-project
-E:\project\environments\anvita\Scripts\activate
 ```
 
 ## Project Timeline
